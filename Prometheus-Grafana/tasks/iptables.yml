@@ -1,0 +1,39 @@
+---
+- name: Forward port 80 to 443
+  iptables:
+    table: nat
+    chain: PREROUTING
+    in_interface: eth0
+    protocol: tcp
+    match: tcp
+    destination_port: 80
+    jump: REDIRECT
+    to_ports: 443
+    comment: Redirect web traffic to port https
+  become: yes
+
+- name: Allow related and established connections
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+  become: yes
+
+- name: Allow new incoming SYN packets on TCP port 22 (SSH).
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    jump: ACCEPT
+    comment: Accept SSH connections.
+  become: yes
+
+- name: Allow https
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 9090
+    jump: ACCEPT
+    comment: Accept new https connections.
+  become: yes
+

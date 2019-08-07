@@ -1,0 +1,36 @@
+---
+
+- name: Add Docker GPG apt Key
+  become: yes
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  become: yes
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: Update apt and install pip3
+  become: yes
+  apt: update_cache=yes name=python3-pip state=latest
+    
+
+- name: Install dependent python libraries
+  pip:
+    name: 
+      - docker==2.0.0
+  become: yes
+
+- name: Update apt and install docker-ce
+  become: yes
+  apt: update_cache=yes name=docker-ce state=latest
+
+- name: install dependencies
+  become: yes
+  apt: update_cache=yes name=libpq-dev state=latest  
+
+- name: install dependency for psql
+  become: yes
+  apt: name=python3-psycopg2 state=latest

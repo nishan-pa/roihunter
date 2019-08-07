@@ -1,0 +1,59 @@
+---
+prometheus_image: prom/prometheus:v2.11.1
+prometheus_volume_source: /srv/prometheus-data
+prometheus_volume_target: /prometheus-data
+prometheus_volume_mountinstruction: "{{prometheus_volume_source}}:{{ prometheus_volume_target }}"
+prometheus_container_name: prometheus
+prometheus_commandline_args:
+  config.file: "{{ prometheus_volume_target }}/prometheus.yml"
+  storage.tsdb.path: "{{ prometheus_volume_target}}/data"
+
+prometheus_node_exporter_image: wrouesnel/postgres_exporter
+prometheus_node_exporter_container_name: postgresql_exporter 
+nginx_container_name: nginx
+nginx_image: nginx:mainline-perl
+grafana_container_name: grafana
+grafana_image: grafana/grafana:6.2.5
+grafana_volume_folder: /srv/grafana
+grafana_volume_storage_source: "{{grafana_volume_folder}}/storage"
+grafana_volume_storage_target: /var/lib/grafana
+grafana_volume_storage_mountinstruction: "{{ grafana_volume_storage_source }}:{{ grafana_volume_storage_target }}"
+grafana_volume_datasource_source: /srv/grafana/datasources.json
+nginx_volume_mountinstructions: 
+        - "/srv/nginx.conf:/etc/nginx/nginx.conf"
+        - "/srv/nginx.vh.default.conf:/etc/nginx/conf.d/default.conf"
+        - "/srv/localhost.crt:/etc/nginx/localhost.crt"
+        - "/srv/localhost.key:/etc/nginx/localhost.key"  
+grafana_volume_entrypoint_source: /srv/grafana/setup.sh
+grafana_volume_crt_source: /srv/grafana/localhost.crt
+grafana_volume_key_source: /srv/grafana/localhost.key
+grafana_volume_grafanaini_source: /srv/grafana/grafana.ini
+grafana_volume_dashboard_source: /srv/grafana/postgres.json
+grafana_volume_datasource_target: /etc/grafana/datasources/datasources.json
+grafana_volume_crt_target: /etc/grafana/ssl/localhost.crt
+grafana_volume_key_target: /etc/grafana/ssl/localhost.key
+grafana_volume_grafanaini_target: /etc/grafana/grafana.ini
+grafana_volume_dashboard_target: /etc/grafana/dashboards/postgres.json
+grafana_volume_entrypoint_target: /setup.sh
+grafana_volume_datasource_mountinstruction: "{{ grafana_volume_datasource_source}}:{{grafana_volume_datasource_target}}"
+grafana_volume_dashboard_mountinstruction: "{{ grafana_volume_dashboard_source}}:{{grafana_volume_dashboard_target}}"
+grafana_volume_entrypoint_mountinstruction: "{{ grafana_volume_entrypoint_source}}:{{grafana_volume_entrypoint_target}}"
+grafana_volume_crt_mountinstruction: "{{ grafana_volume_crt_source}}:{{grafana_volume_crt_target}}"
+grafana_volume_key_mountinstruction: "{{ grafana_volume_key_source}}:{{grafana_volume_key_target}}"
+grafana_volume_grafanaini_mountinstruction: "{{ grafana_volume_grafanaini_source}}:{{grafana_volume_grafanaini_target}}"
+grafana_volume_mountinstructions:
+        - "{{grafana_volume_storage_mountinstruction}}"
+        - "{{grafana_volume_datasource_mountinstruction}}"
+        - "{{grafana_volume_dashboard_mountinstruction}}"
+        - "{{grafana_volume_crt_mountinstruction}}"
+        - "{{grafana_volume_key_mountinstruction}}"
+        - "{{grafana_volume_grafanaini_mountinstruction}}"
+        - "{{grafana_volume_entrypoint_mountinstruction}}"
+
+grafana_admin_user: admin
+grafana_admin_password: admin
+grafana_environment_variables:
+  GF_SECURITY_ADMIN_USER: "{{ grafana_admin_user }}"
+  GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_admin_password }}"
+
+prometheus_node_exporter_image: wrouesnel/postgres_exporter

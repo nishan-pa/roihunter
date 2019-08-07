@@ -1,0 +1,58 @@
+---
+- name: Create a network
+  become: yes
+  docker_network:
+    name: 'devops_net'
+
+- name: Deploy Postgresql Database
+  become: yes
+  docker_container:
+    name: postgresql
+    hostname: postgresql
+    image: postgres:9.6
+    state: 'started'
+    env:
+      POSTGRES_USER: 'devops'
+      POSTGRES_PASSWORD: 'devops'
+      POSTGRES_DATABASE: 'devops'
+    networks:
+            - name: devops_net
+    volumes:
+      - /opt/post:/var/lib/postgresql/data
+    published_ports:
+            - 127.0.0.1:5432:5432
+    restart_policy: always
+
+- name: Wait for postgres to accept connections
+  become: yes
+  wait_for:
+    port: 5432
+    delay: 15
+  register: postgres_running
+  
+- name: create db for testuser
+  postgresql_db:
+    name: 'testuser'
+    state: 'present'
+    login_host: 'localhost'
+    login_user: 'devops'
+    login_password: 'devops'
+
+- postgresql_user:
+    db: 'testuser'
+    name: 'testuser'
+    password: 'testuser'
+    login_host: 'localhost'
+    login_user: 'devops'
+    login_password: 'devops'
+    encrypted: no
+
+- name: create db
+  postgresql_db:
+    name: 'test'
+    state: 'present'
+    owner: 'testuser'
+    login_host: 'localhost'
+    login_user: 'devops'
+    login_password: 'devops'
+

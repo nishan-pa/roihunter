@@ -1,0 +1,80 @@
+---
+- name: Ensure grafana's directory exists
+  become: yes
+  file:
+        path: /srv/grafana/storage
+        owner: nobody
+        mode: 0777
+        state: directory 
+  notify: "Restart grafana container"
+- name: Ensure grafana's storage directory exists
+  become: yes
+  file:
+        path: "{{ grafana_volume_storage_source }}" 
+        state: directory 
+
+- name: Copy datasource file to grafana
+  become: yes
+  template:
+    src: datasources.json.j2
+    dest: "{{ grafana_volume_datasource_source }}"  
+    owner: root
+    mode: 0777
+  notify: "Restart grafana container"
+
+- name: Copy Postgresql Dashboard
+  become: yes
+  copy:
+    src: postgres.json
+    dest: /srv/grafana/postgres.json
+    owner: root
+    mode: '0777'
+
+- name: Copy grafana.ini
+  become: yes
+  copy:
+    src: grafana.ini
+    dest: /srv/grafana/grafana.ini
+    owner: root
+    mode: '0777'
+
+- name: Copy SSL crt
+  become: yes
+  copy:
+    src: localhost.crt
+    dest: /srv/grafana/localhost.crt
+    owner: root
+    mode: '0777'
+    
+- name: Copy SSL key
+  become: yes
+  copy:
+    src: localhost.key
+    dest: /srv/grafana/localhost.key
+    owner: root
+    mode: '0777'
+
+- name: Copy Entrypoint
+  become: yes
+  copy:
+    src: setup.sh
+    dest: /srv/grafana/setup.sh
+    mode: '0777'
+
+- name: Start Grafana container
+  become: yes
+  docker_container:
+    name: "{{ grafana_container_name }}"
+    hostname: "{{ grafana_container_name }}"
+    image: "{{ grafana_image }}" 
+    networks:
+            - name: devops_net
+    entrypoint: /setup.sh
+    published_ports:
+      - 3000:3000 
+    volumes: "{{ grafana_volume_mountinstructions }}"
+    env: "{{ grafana_environment_variables }}" 
+    restart_policy: always
+
+
+

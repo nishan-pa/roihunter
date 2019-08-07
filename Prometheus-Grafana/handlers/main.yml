@@ -1,0 +1,29 @@
+---
+
+- name: Restart prometheus container
+  docker_container:
+      name: "{{ prometheus_container_name }}"
+      image: "{{ prometheus_image }}"
+      networks:
+        - name: devops_net
+      command: "{% for key in prometheus_commandline_args %}--{{key}}={{prometheus_commandline_args[key]}} {% endfor %}"
+      restart: yes 
+      #      published_ports:
+      #        - 9090:9090
+      volumes:
+        - "{{ prometheus_volume_mountinstruction }}"
+- name: Restart grafana container
+  become: yes
+  docker_container:
+    name: "{{ grafana_container_name }}"
+    hostname: "{{ grafana_container_name }}"
+    image: "{{ grafana_image }}" 
+    networks:
+            - name: devops_net
+    entrypoint: /setup.sh
+    restart: yes
+    published_ports:
+      - 3000:3000 
+    volumes: "{{ grafana_volume_mountinstructions }}"
+    env: "{{ grafana_environment_variables }}" 
+    restart_policy: always

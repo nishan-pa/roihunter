@@ -1,0 +1,38 @@
+---
+- name: Copy cert
+  become: yes
+  template:
+    src: localhost.crt.j2
+    dest: "/srv/localhost.crt"
+
+- name: Copy key
+  become: yes
+  template:
+    src: localhost.key.j2
+    dest: "/srv/localhost.key"
+
+- name: Copy nginx.conf
+  become: yes
+  template:
+    src: nginx.conf.j2
+    dest: "/srv/nginx.conf"
+
+- name: Copy custom conf
+  become: yes
+  template:
+    src: nginx.vh.default.conf.j2
+    dest: "/srv/nginx.vh.default.conf"
+
+- name: Start Prometheus Proxy
+  become: yes
+  docker_container:
+    name: "{{ nginx_container_name }}"
+    hostname: "{{ nginx_container_name }}"
+    image: "{{ nginx_image }}"
+    networks:
+            - name: devops_net
+    published_ports:
+            - 9090:9090
+    volumes: "{{ nginx_volume_mountinstructions }}"
+    restart_policy: always
+

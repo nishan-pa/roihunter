@@ -1,0 +1,7 @@
+---
+- include: install_postgresql_exporter
+- include: install_prometheus.yml
+- include: install_grafana.yml
+- include: install_nginx_prometheus.yml
+#- include: iptables.yml
+
