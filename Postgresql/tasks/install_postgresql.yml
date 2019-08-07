@@ -55,4 +55,8 @@
     login_host: 'localhost'
     login_user: 'devops'
     login_password: 'devops'
+    
+- postgresql_schema:
+    name: testing
+    owner: devops 
 
