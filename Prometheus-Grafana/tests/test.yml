@@ -1,5 +1,5 @@
 ---
-- hosts: 54.185.167.146
+- hosts: ip
   user: ubuntu
   vars:
     ansible_python_interpreter: /usr/bin/python3  
