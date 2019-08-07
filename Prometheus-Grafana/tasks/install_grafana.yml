@@ -6,7 +6,7 @@
         owner: nobody
         mode: 0777
         state: directory 
-  notify: "Restart grafana container"
+#  notify: "Restart grafana container"
 - name: Ensure grafana's storage directory exists
   become: yes
   file:
@@ -20,7 +20,7 @@
     dest: "{{ grafana_volume_datasource_source }}"  
     owner: root
     mode: 0777
-  notify: "Restart grafana container"
+#  notify: "Restart grafana container"
 
 - name: Copy Postgresql Dashboard
   become: yes
