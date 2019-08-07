@@ -6,9 +6,9 @@
         owner: nobody
         mode: 0777 
         state: directory 
-  notify: 
-    - Restart prometheus container
-    - Restart grafana container
+#  notify: 
+#    - Restart prometheus container
+#    - Restart grafana container
 
 - name: Copy config file
   become: yes
@@ -17,9 +17,9 @@
         dest: "{{ prometheus_volume_source}}/prometheus.yml"
         owner: root
         mode: 0666 
-  notify: 
-    - Restart prometheus container
-    - Restart grafana container
+#  notify: 
+#    - Restart prometheus container
+#    - Restart grafana container
 
 - name: Start prometheus container
   become: yes
