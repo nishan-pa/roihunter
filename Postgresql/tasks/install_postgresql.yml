@@ -58,5 +58,8 @@
     
 - postgresql_schema:
     name: testing
-    owner: devops 
+    owner: devops
+    login_host: 'localhost'
+    login_user: 'devops'
+    login_password: 'devops'
 
