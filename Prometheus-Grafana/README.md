@@ -26,10 +26,7 @@ Pretty straigh forward.
     - Prometheus-Grafana
 ```
 
-License
--------
 
-MIT License
 
 Author Information
 ------------------
