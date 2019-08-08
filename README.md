@@ -1,21 +1,21 @@
 # roihunter
 Project for Roihunter
 
-This Project is having two roles postgresql and Prometheus-grafana and meant to run together in this senario
+This Project is having two roles postgresql and Prometheus-grafana and meant to run together in this senario.
 Role Prometheus-Grafana is depends on Postgresql
 
 
 ##########################################
-sample playbook
-
+Example Playbook
+----------------
+Pretty straigh forward.
+``` yaml
 ---
-- hosts: ip
-  user: ubuntu
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
+- hosts: localhost
   roles:
     - Postgresql
     - Prometheus-Grafana
+```    
     
 ############################################
 
