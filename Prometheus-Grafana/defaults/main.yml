@@ -7,6 +7,8 @@ prometheus_container_name: prometheus
 prometheus_commandline_args:
   config.file: "{{ prometheus_volume_target }}/prometheus.yml"
   storage.tsdb.path: "{{ prometheus_volume_target}}/data"
+  web.external-url: "http://0.0.0.0/prometheus" 
+  web.route-prefix: "/"
 
 prometheus_node_exporter_image: wrouesnel/postgres_exporter
 prometheus_node_exporter_container_name: postgresql_exporter 

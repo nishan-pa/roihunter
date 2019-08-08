@@ -70,8 +70,8 @@
     networks:
             - name: devops_net
     entrypoint: /setup.sh
-    published_ports:
-      - 3000:3000 
+    #    published_ports:
+    #      - 3000:3000 
     volumes: "{{ grafana_volume_mountinstructions }}"
     env: "{{ grafana_environment_variables }}" 
     restart_policy: always
