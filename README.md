@@ -10,6 +10,9 @@ Example Playbook
 ``` yaml
 ---
 - hosts: localhost
+  user: <sudo user>
+  vars: 
+    ansible_python_interpreter: /usr/bin/python3
   roles:
     - Postgresql
     - Prometheus-Grafana
