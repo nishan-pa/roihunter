@@ -5,10 +5,8 @@ This Project is having two roles postgresql and Prometheus-grafana and meant to 
 Role Prometheus-Grafana is depends on Postgresql
 
 
-##########################################
 Example Playbook
 ----------------
-Pretty straigh forward.
 ``` yaml
 ---
 - hosts: localhost
