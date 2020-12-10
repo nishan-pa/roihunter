@@ -1,6 +1,6 @@
 ---
-- hosts: 52.39.65.199
-  user: ubuntu
+- hosts: localhost
+  user: nishan
   vars:
     ansible_python_interpreter: /usr/bin/python3  
   roles:
